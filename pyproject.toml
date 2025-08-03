@@ -1,0 +1,34 @@
+# pyproject.toml
+
+[build-system]
+# These lines specify that the package should be built using setuptools.
+# This is standard and rarely needs changing.
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+# --- Core Metadata ---
+name = "expand-and-shift"
+version = "0.1.0"
+authors = [
+  { name="David Waterman", email="david.waterman@stfc.ac.uk" },
+]
+description = "Process TIFF images from a 512x512 Timepix or Medipix camera to handle wide pixels and shift to a consistent beam centre."
+requires-python = ">=3.10"
+
+# --- Dependencies ---
+# List all external libraries your package needs to run.
+# pip will automatically install these when your package is installed.
+dependencies = [
+    "tifffile",
+]
+
+[project.scripts]
+# --- Entry Points ---
+# This is where you define the command-line scripts.
+# The format is: <command-name> = "path.to.module:function_to_run"
+#
+# When you install the package, a command named `run-module-one` will be
+# created, and running it will execute the `main` function in `module_one.py`.
+split-wide-pixels = "expand_and_shift.split_wide_pixels:main"
+shift-images = "expand_and_shift.shift_images:main"
