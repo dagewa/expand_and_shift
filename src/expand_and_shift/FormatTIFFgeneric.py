@@ -44,7 +44,7 @@ class FormatTIFFgeneric(Format):
             assert len(tif.pages) == 1
             assert len(tif.series) == 1
             assert tif.pages[0].shape == (516, 516)
-            assert tif.pages[0].tags["software"].value == "expand-and-shift"
+            assert tif.pages[0].tags[305].value == "expand-and-shift"
         except (AssertionError, KeyError):
             return False
         finally:
