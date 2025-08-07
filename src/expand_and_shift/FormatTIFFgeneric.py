@@ -1,5 +1,10 @@
-"""A format class for generic TIFF images plus implementations for specific
-detectors producing electron diffraction data"""
+"""Format class support for 516x516 pixel TIFF images from a Medipix quad detector.
+These images are created by expand-and-shift package. The images are processed to
+replace wide pixels with duplicate pixels of the normal width, and the central
+cross pixels are set to a maximum value for masking purposes. The class is named
+FormatTIFFgeneric so that it replaces other versions of this class that may
+have been installed as a plugin previously.
+"""
 
 from __future__ import annotations
 
