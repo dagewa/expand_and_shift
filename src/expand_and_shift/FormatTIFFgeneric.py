@@ -50,6 +50,8 @@ class FormatTIFFgeneric(Format):
         finally:
             tif.close()
 
+        return True
+
     def get_raw_data(self):
         """Get the pixel intensities"""
 
