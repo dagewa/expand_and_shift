@@ -140,7 +140,7 @@ def main():
             output_path = f"expanded_{basename}"
 
             # 4. Write the modified NumPy array to a new TIFF file
-            tifffile.imwrite(output_path, modified_image)
+            tifffile.imwrite(output_path, modified_image, software="expand-and-shift")
             print(f"  -> Modified image successfully saved as '{output_path}'")
 
         except Exception as e:

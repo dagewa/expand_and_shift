@@ -114,7 +114,7 @@ def main():
 
             basename = os.path.basename(input_path)
             output_path = f"shifted_{basename}"
-            tifffile.imwrite(output_path, image_shifted)
+            tifffile.imwrite(output_path, image_shifted, software="expand-and-shift")
             print(f"  -> Shifted image successfully saved as '{output_path}'")
 
         except Exception as e:
