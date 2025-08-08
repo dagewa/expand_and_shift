@@ -57,7 +57,7 @@ The blue line on these plots shows the raw per-image beam centre calculation fro
 We now import the new data set with DIALS:
 
 ```
-dials.import shifted_expanded_*.tif\
+dials.import shifted_split_*.tif\
   distance=780\
   geometry.goniometer.axis=1,0,0\
   oscillation=0,0.3
