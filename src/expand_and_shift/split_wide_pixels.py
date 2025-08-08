@@ -137,10 +137,10 @@ def main():
 
             # 3. Construct the output filename
             basename = os.path.basename(input_path)
-            output_path = f"expanded_{basename}"
+            output_path = f"split_{basename}"
 
             # 4. Write the modified NumPy array to a new TIFF file
-            tifffile.imwrite(output_path, modified_image, software="expand-and-shift")
+            tifffile.imwrite(output_path, modified_image, software="split-and-shift")
             print(f"  -> Modified image successfully saved as '{output_path}'")
 
         except Exception as e:

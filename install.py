@@ -57,7 +57,7 @@ if __name__ == "__main__":
                 "dxtbx.install_format",
                 "-u",
                 os.path.join(
-                    this_dir, "src", "expand_and_shift", "FormatTIFFgeneric.py"
+                    this_dir, "src", "split_and_shift", "FormatTIFFgeneric.py"
                 ),
             ],
             check=True,

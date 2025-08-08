@@ -1,5 +1,5 @@
 """Format class support for 516x516 pixel TIFF images from a Medipix quad detector.
-These images are created by expand-and-shift package. The images are processed to
+These images are created by split-and-shift package. The images are processed to
 replace wide pixels with duplicate pixels of the normal width, and the central
 cross pixels are set to a maximum value for masking purposes. The class is named
 FormatTIFFgeneric so that it replaces other versions of this class that may
@@ -23,7 +23,7 @@ except ImportError:
 
 class FormatTIFFgeneric(Format):
     """TIFF image reader specifically for images created by the split-wide-pixels
-    command from the expand-and-shift package."""
+    command from the split-and-shift package."""
 
     @staticmethod
     def understand(image_file):
@@ -44,7 +44,7 @@ class FormatTIFFgeneric(Format):
             assert len(tif.pages) == 1
             assert len(tif.series) == 1
             assert tif.pages[0].shape == (516, 516)
-            assert tif.pages[0].tags[305].value == "expand-and-shift"
+            assert tif.pages[0].tags[305].value == "split-and-shift"
         except (AssertionError, KeyError):
             return False
         finally:
