@@ -110,7 +110,7 @@ def main():
     # Check if any files were provided
     if not input_files:
         print("Error: No input files provided.")
-        print("Usage: python split_wide_pixels.py <file1.tif> <file2.tif> ...")
+        print("Usage: split-wide-pixels.py <file1.tif> <file2.tif> ...")
         sys.exit(1)
 
     print(f"Found {len(input_files)} image(s) to process. 🚀")

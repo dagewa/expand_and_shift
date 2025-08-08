@@ -53,9 +53,7 @@ def main():
     """
     Main function to shift TIFF images to a common beam centre.
     """
-    usage = (
-        "dials.python shift_images.py imported.expt beam_positions=beam_positions.json"
-    )
+    usage = "shift-images.py imported.expt beam_positions=beam_positions.json"
     parser = ArgumentParser(
         usage=usage,
         phil=phil_scope,
@@ -91,6 +89,7 @@ def main():
     # Get current beam centre from the experiment
     bc = panel.get_ray_intersection_px(beam.get_s0())
 
+    # Get shift from the current beam centre to the new beam centre
     shift_fast = (bc_fast - bc[0]).astype(int)
     shift_slow = (bc_slow - bc[1]).astype(int)
 
@@ -110,7 +109,7 @@ def main():
                 print(f"\nSkipping '{input_path}': Wrong shape.")
                 continue
 
-            image_shifted = shift(image, shift=(shift_fast[i], shift_slow[i]), cval=0)
+            image_shifted = shift(image, shift=(-shift_slow[i], -shift_fast[i]), cval=0)
 
             basename = os.path.basename(input_path)
             output_path = f"shifted_{basename}"
