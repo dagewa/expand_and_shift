@@ -86,10 +86,8 @@ def main():
     bc_fast = calculate_shift(i, bc_fast, "fast")
     bc_slow = calculate_shift(i, bc_slow, "slow")
 
-    # Get current beam centre from the experiment
-    bc = panel.get_ray_intersection_px(beam.get_s0())
-
-    # Get shift from the current beam centre to the new beam centre
+    # Get shift from the centre of the image to the new beam centre
+    bc = [e / 2 for e in panel.get_image_size()]
     shift_fast = (bc_fast - bc[0]).astype(int)
     shift_slow = (bc_slow - bc[1]).astype(int)
 
