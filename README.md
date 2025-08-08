@@ -28,7 +28,7 @@ Viewing the images using the command `dials.image_viewer imported.expt` shows th
 
 <img width="531" height="531" alt="image-viewer" src="https://github.com/user-attachments/assets/6397b953-dcd4-4ede-a336-04b284de2243" />
 
-The next job is to determine the beam centre that occurs during data collection. We will use `dials.search_beam_position` for that. These options have proved to work quite well for these images:
+The next job is to determine the beam centre drift that occurs during data collection. We will use `dials.search_beam_position` for that. These options have proved to work quite well for these images:
 
 ```
 dials.search_beam_position imported.expt\
