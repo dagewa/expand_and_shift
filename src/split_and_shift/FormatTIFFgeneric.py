@@ -1,0 +1,112 @@
+"""Format class support for 516x516 pixel TIFF images from a Medipix quad detector.
+These images are created by split-and-shift package. The images are processed to
+replace wide pixels with duplicate pixels of the normal width, and the central
+cross pixels are set to a maximum value for masking purposes. The class is named
+FormatTIFFgeneric so that it replaces other versions of this class that may
+have been installed as a plugin previously.
+"""
+
+from __future__ import annotations
+
+import os
+import re
+
+from dxtbx import flumpy
+from dxtbx.format.Format import Format
+from dxtbx.model.beam import Probe
+
+try:
+    import tifffile
+except ImportError:
+    tifffile = None
+
+
+class FormatTIFFgeneric(Format):
+    """TIFF image reader specifically for images created by the split-wide-pixels
+    command from the split-and-shift package."""
+
+    @staticmethod
+    def understand(image_file):
+        """Check to see if this looks like a TIFF format image with a single page"""
+
+        if not tifffile:
+            print(
+                "FormatTIFFgeneric is installed but the required library tifffile is not available"
+            )
+            return False
+
+        try:
+            tif = tifffile.TiffFile(image_file)
+        except tifffile.TiffFileError:
+            return False
+
+        try:
+            assert len(tif.pages) == 1
+            assert len(tif.series) == 1
+            assert tif.pages[0].shape == (516, 516)
+            assert tif.pages[0].tags[305].value == "split-and-shift"
+        except (AssertionError, KeyError):
+            return False
+        finally:
+            tif.close()
+
+        return True
+
+    def get_raw_data(self):
+        """Get the pixel intensities"""
+
+        raw_data = tifffile.imread(self._image_file)
+        return flumpy.from_numpy(raw_data.astype(float))
+
+    def _goniometer(self):
+        """Dummy goniometer, 'vertical' as the images are viewed. Not completely
+        sure about the handedness yet"""
+
+        return self._goniometer_factory.known_axis((0, 1, 0))
+
+    def _beam(self):
+        """Dummy beam, energy 200 keV"""
+
+        wavelength = 0.02508
+        return self._beam_factory.make_polarized_beam(
+            sample_to_source=(0.0, 0.0, 1.0),
+            wavelength=wavelength,
+            polarization=(0, 1, 0),
+            polarization_fraction=0.5,
+            probe=Probe.electron,
+        )
+
+    def _detector(self):
+        """Dummy detector"""
+
+        pixel_size = 0.055, 0.055
+        image_size = (516, 516)
+        dyn_range = 16
+        trusted_range = (
+            -1,
+            2**dyn_range - 2,
+        )  # use max of the dynamic range as a mask value
+        beam_centre = [(p * i) / 2 for p, i in zip(pixel_size, image_size)]
+        d = self._detector_factory.simple(
+            "PAD", 2440, beam_centre, "+x", "-y", pixel_size, image_size, trusted_range
+        )
+        return d
+
+    def _scan(self):
+        """Dummy scan for this image"""
+
+        fname = os.path.split(self._image_file)[-1]
+        # assume that the final number before the extension is the image number
+        s = fname.split("_")[-1].split(".")[0]
+        try:
+            index = int(re.match(".*?([0-9]+)$", s).group(1))
+        except AttributeError:
+            index = 1
+        exposure_times = 0.0
+        frame = index - 1
+        # Dummy scan with a 0.5 deg image
+        oscillation = (frame * 0.5, 0.5)
+        epochs = [0]
+        return self._scan_factory.make_scan(
+            (index, index), exposure_times, oscillation, epochs, deg=True
+        )
